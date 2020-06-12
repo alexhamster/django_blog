@@ -123,3 +123,11 @@ INTERNAL_IPS = ['127.0.0.1']
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_URL = '/user/login/'
+
+LOGIN_REDIRECT_URL = '/board/profile/'
+
+LOGOUT_REDIRECT_URL = '/board/'
+
+PASSWORD_RESET_TIMEOUT_DAYS = 1
