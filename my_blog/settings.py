@@ -126,7 +126,7 @@ STATIC_URL = '/static/'
 
 LOGIN_URL = '/user/login/'
 
-LOGIN_REDIRECT_URL = '/board/profile/'
+LOGIN_REDIRECT_URL = '/board/'
 
 LOGOUT_REDIRECT_URL = '/board/'
 
