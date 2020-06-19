@@ -2,6 +2,7 @@ import datetime
 from django.db import models
 from django.utils import timezone
 from django.db.models.signals import pre_save
+from faker import Faker
 
 
 class Post(models.Model):
@@ -15,6 +16,17 @@ class Post(models.Model):
         return self.pub_date >= timezone.now() - \
                datetime.timedelta(days=7)
 
+    def generate(self, amount=5):
+        fake = Faker()
+        for i in range(amount):
+            # через .create нельзя создавать m2m поля
+            Post.objects.create(
+                header=fake.name(),
+                body=fake.text()
+                )
+
+
     def __str__(self):
         return self.header
+
 

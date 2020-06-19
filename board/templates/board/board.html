@@ -1,4 +1,13 @@
 {% extends 'loyout/base.html' %}
 {% block content %}
-    <p>There are a lot of posts</p>
+    <h1>Posts</h1>
+    <ul>
+        {% for article in object_list %}
+            <a href={{ article.id }}>
+            <li>{{ article.pub_date|date }} - {{ article.header }}
+            </a>
+        {% empty %}
+            <li>No articles yet.</li>
+        {% endfor %}
+    </ul>
 {% endblock %}
