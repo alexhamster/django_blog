@@ -19,6 +19,7 @@ from django.conf import settings
 import debug_toolbar
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
+from board.views import IndexView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +27,5 @@ urlpatterns = [
     path('board/', include('board.urls'), name='board'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),  # as_view(next_page='board:index')
+    path('', IndexView.as_view(), name='index')
 ]

@@ -10,6 +10,10 @@ class IndexView(TemplateView):
     template_name = 'board/index.html'
 
 
+class BoardView(TemplateView):
+    template_name = 'board/board.html'
+
+
 class CreatePost(CreateView):
     model = Post
     success_url = '/board/'
