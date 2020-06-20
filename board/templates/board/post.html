@@ -1,8 +1,11 @@
 {% extends 'loyout/base.html' %}
 {% block content %}
+    {% for rubric in rubrics %}
+        <li>{{ rubric }}</li>
+    {% endfor %}
     <ul>
-        <p>{{ object.id }}</p>
-        <p>{{ object.header }}</p>
-        {{ object.body }}
+        <p>{{ id }}</p>
+        <p>{{ header }}</p>
+        {{ body }}
     </ul>
 {% endblock %}

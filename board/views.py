@@ -21,12 +21,17 @@ class BoardView(ListView):
         return context
 
 
-class PostView(DetailView):
+class PostView(TemplateView):
     template_name = 'board/post.html'
-    model = Post
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        p = Post.objects.prefetch_related('rubrics').get(id=self.kwargs['pk'])  # get return ONE object: Post
+        # in case of MANY objects it throws exception
+        context['rubrics'] = list(p.rubrics.all())  # TODO посмотреть можно ли зарефакторить
+        context['body'] = p.body
+        context['header'] = p.header
+        context['id'] = p.id
         return context
 
 
