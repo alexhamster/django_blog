@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView
-from board.models import Post
+from django.views.generic.edit import CreateView, FormView
+from board.models import Post, Comment
 from django.views.generic.list import ListView
 from django.utils import timezone
-from django.views.generic.detail import DetailView
+from django.forms import ModelForm
+from django import forms
 # Create your views here.
 
 class IndexView(TemplateView):
@@ -21,8 +22,15 @@ class BoardView(ListView):
         return context
 
 
-class PostView(TemplateView):
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('sender_email', 'text')
+
+class PostView(FormView):
     template_name = 'board/post.html'
+    form_class = CommentForm
+    success_url = '/board/'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -31,11 +39,21 @@ class PostView(TemplateView):
         context['rubrics'] = list(post.rubrics.all())
         context['comments'] = list(post.comment_set.all())
         context['post'] = post
+
+        #print(context)
+        # in template name 'form' used as default
         return context
+
+    def form_valid(self, form):  # вызывается когда валидная форма POSTed
+        model_instance = form.save(commit=False)  # return model instance without saving to db
+        model_instance.to_post = Post.objects.get(id=self.kwargs['pk'])  # TODO refactor?
+        form.save()
+        return super().form_valid(form)
 
 
 class CreatePost(CreateView):
     model = Post
     success_url = '/board/'
     fields = ['header', 'body']
+
 

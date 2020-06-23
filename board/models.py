@@ -5,7 +5,6 @@ from faker import Faker
 import random
 from django.contrib.auth.models import User
 
-
 class Rubric(models.Model):
     name = models.CharField(verbose_name='rubric', max_length=100, null=False, unique=True)
     description = models.CharField(verbose_name='rubric description', max_length=300, blank=True)
@@ -33,7 +32,7 @@ class Comment(models.Model):
     pub_date = models.DateTimeField(verbose_name='time commented', auto_now_add=True)
     rating = models.SmallIntegerField(verbose_name='rating', default=0, editable=False)
     to_post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='comment for a post')
-    answer_to_comment = models.ForeignKey('self', null=True, on_delete=models.CASCADE)  #an answer to another comment
+    answer_to_comment = models.ForeignKey('self', null=True, on_delete=models.CASCADE)  # an answer to another comment
     author = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='author of comment', null=True)
     sender_email = models.EmailField(verbose_name='email of sender', default='anon@ya.ru', null=False)
 
@@ -42,7 +41,7 @@ class Comment(models.Model):
         verbose_name_plural = 'comments'
 
     def __str__(self):
-        return self.author.email + self.to_post.header
+        return self.text
 
 
 class Post(models.Model):

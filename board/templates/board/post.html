@@ -6,6 +6,13 @@
     <p>{{ post.id }}</p>
     <p>{{ post.header }}</p>
     {{ post.body }}
+    <br><br>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.sender_email }}
+        {{ form.text }}
+        <input type="submit" value="comment">
+    </form>
 
     {% if comments %}
         <br><br>
@@ -14,7 +21,7 @@
         {% for comment in comments %}
             <br>
             <b>from: {{ comment.sender_email }}. {{ comment.pub_date }}</b>
-                {{ comment.text }}
+            {{ comment.text }}
             <br>
         {% endfor %}
     {% else %}
