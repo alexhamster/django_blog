@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 from faker import Faker
 import random
+from django.contrib.auth.models import User
 
 
 class Rubric(models.Model):
@@ -21,10 +22,27 @@ class Rubric(models.Model):
             Rubric.objects.create(
                 name=i,
                 description=fake.text()
-                )
+            )
 
     def __str__(self):
         return self.name
+
+
+class Comment(models.Model):
+    text = models.CharField(verbose_name='comment', max_length=300)
+    pub_date = models.DateTimeField(verbose_name='time commented', auto_now_add=True)
+    rating = models.SmallIntegerField(verbose_name='rating', default=0, editable=False)
+    to_post = models.ForeignKey('Post', on_delete=models.CASCADE, verbose_name='comment for a post')
+    answer_to_comment = models.ForeignKey('self', null=True, on_delete=models.CASCADE)  #an answer to another comment
+    author = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='author of comment', null=True)
+    sender_email = models.EmailField(verbose_name='email of sender', default='anon@ya.ru', null=False)
+
+    class Meta:
+        verbose_name = 'comment'
+        verbose_name_plural = 'comments'
+
+    def __str__(self):
+        return self.author.email + self.to_post.header
 
 
 class Post(models.Model):
@@ -43,7 +61,7 @@ class Post(models.Model):
         return self.pub_date >= timezone.now() - \
                datetime.timedelta(days=7)
 
-    def generate(self, amount=10):
+    def generate_rubrics(self, amount=10):
         fake = Faker()
         for i in range(amount):
             # через .create нельзя создавать m2m поля, надо чтобы оба инстенса были в бд
@@ -53,6 +71,17 @@ class Post(models.Model):
                 body=fake.text(),
             )
             instance.rubrics.add(*random.sample(all_rubrics, random.randint(1, len(all_rubrics))))
+
+    def generate_comments(self, amount=5):  # generate random count of comments for every post
+        faker = Faker()
+        for post in Post.objects.all():
+            for i in range(amount):
+                instance = Comment.objects.create(
+                    text=faker.text(),
+                    to_post=post,
+                    sender_email=faker.name().replace(' ', '_') + '@ya.ru',
+                )
+
 
     def __str__(self):
         return self.header
@@ -66,5 +95,5 @@ class Kit(models.Model):
 '''
 from board.models import *
 p = Post()
-p.generate()
+p.generate_comments()
 '''

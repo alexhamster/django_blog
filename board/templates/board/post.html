@@ -3,9 +3,22 @@
     {% for rubric in rubrics %}
         <li>{{ rubric }}</li>
     {% endfor %}
-    <ul>
-        <p>{{ id }}</p>
-        <p>{{ header }}</p>
-        {{ body }}
+    <p>{{ post.id }}</p>
+    <p>{{ post.header }}</p>
+    {{ post.body }}
+
+    {% if comments %}
+        <br><br>
+        <b>Comments:</b>
+        <br><br>
+        {% for comment in comments %}
+            <br>
+            <b>from: {{ comment.sender_email }}. {{ comment.pub_date }}</b>
+                {{ comment.text }}
+            <br>
+        {% endfor %}
+    {% else %}
+        <b><li>No comments</li></b>
+    {% endif %}
     </ul>
 {% endblock %}
