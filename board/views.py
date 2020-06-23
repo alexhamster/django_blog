@@ -39,3 +39,4 @@ class CreatePost(CreateView):
     model = Post
     success_url = '/board/'
     fields = ['header', 'body']
+
