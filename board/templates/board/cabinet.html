@@ -1,0 +1,7 @@
+{% extends 'loyout/base.html' %}
+{% block content %}
+    <p>This is cabinet of {{ user.username }}</p>
+    <form action="/logout/" method="get">
+        <input type="submit" value="log out">
+    </form>
+{% endblock %}

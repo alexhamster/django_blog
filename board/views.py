@@ -8,8 +8,13 @@ from django.forms import ModelForm
 from django import forms
 # Create your views here.
 
+
 class IndexView(TemplateView):
     template_name = 'board/index.html'
+
+
+class UserView(TemplateView):
+    template_name = 'board/cabinet.html'
 
 
 class BoardView(ListView):
@@ -26,6 +31,7 @@ class CommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = ('sender_email', 'text')
+
 
 class PostView(FormView):
     template_name = 'board/post.html'
@@ -47,6 +53,8 @@ class PostView(FormView):
     def form_valid(self, form):  # вызывается когда валидная форма POSTed
         model_instance = form.save(commit=False)  # return model instance without saving to db
         model_instance.to_post = Post.objects.get(id=self.kwargs['pk'])  # TODO refactor?
+        if self.request.user.is_authenticated:  # using for auth users theirs emails
+            model_instance.sender_email = self.request.user.email
         form.save()
         return super().form_valid(form)
 

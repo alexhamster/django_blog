@@ -124,12 +124,10 @@ INTERNAL_IPS = ['127.0.0.1']
 
 STATIC_URL = '/static/'
 
-LOGIN_URL = '/user/login/'
+LOGIN_URL = '/login/'
 
 LOGIN_REDIRECT_URL = '/board/'
 
 LOGOUT_REDIRECT_URL = '/board/'
-
-SESSION_COOKIE_SECURE = True
 
 PASSWORD_RESET_TIMEOUT_DAYS = 1

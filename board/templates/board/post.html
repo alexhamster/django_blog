@@ -9,7 +9,11 @@
     <br><br>
     <form method="post">
         {% csrf_token %}
-        {{ form.sender_email }}
+        {% if not user.is_authenticated %}
+            {{ form.sender_email }}
+        {% else %}
+            {{ form.sender_email.as_hidden }}
+        {% endif %}
         {{ form.text }}
         <input type="submit" value="comment">
     </form>
